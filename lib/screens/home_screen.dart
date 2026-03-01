@@ -23,20 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: Image.network(
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Crunchyroll_Logo.svg/1024px-Crunchyroll_Logo.svg.png',
-          height: 24,
-          color: const Color(0xFFF47521),
-          errorBuilder: (context, error, stackTrace) => const Text('KAZE V1'),
-        ),
-        backgroundColor: Colors.transparent,
-        actions: [
-          IconButton(icon: const Icon(Icons.search), onPressed: () {}),
-          IconButton(icon: const Icon(Icons.filter_list), onPressed: () {}),
-        ],
-      ),
       body: Consumer<AnimeProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading && provider.ongoingAnime.isEmpty) {
@@ -47,86 +33,159 @@ class _HomeScreenState extends State<HomeScreen> {
               ? provider.ongoingAnime.first
               : null;
 
-          return RefreshIndicator(
-            onRefresh: () => provider.fetchHome(),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (featuredAnime != null)
-                    _buildFeaturedBanner(context, featuredAnime),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 20,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildSectionHeader(
-                          context,
-                          'Up to Date',
-                          () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const ListAllScreen(type: 'ongoing'),
-                            ),
-                          ),
+          return Stack(
+            children: [
+              RefreshIndicator(
+                onRefresh: () => provider.fetchHome(),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (featuredAnime != null)
+                        _buildFeaturedBanner(context, featuredAnime),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 20,
                         ),
-                        const SizedBox(height: 12),
-                        SizedBox(
-                          height: 220,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: provider.ongoingAnime.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                width: 140,
-                                margin: const EdgeInsets.only(right: 12),
-                                child: AnimeCard(
-                                  anime: provider.ongoingAnime[index],
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildSectionHeader(
+                              context,
+                              'Up to Date',
+                              () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ListAllScreen(type: 'ongoing'),
                                 ),
-                              );
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 32),
-                        _buildSectionHeader(
-                          context,
-                          'Recently Added',
-                          () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const ListAllScreen(type: 'completed'),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                childAspectRatio: 0.65,
-                                crossAxisSpacing: 12,
-                                mainAxisSpacing: 20,
                               ),
-                          itemCount: provider.completedAnime.take(6).length,
-                          itemBuilder: (context, index) {
-                            return AnimeCard(
-                              anime: provider.completedAnime[index],
-                            );
-                          },
+                            ),
+                            const SizedBox(height: 12),
+                            SizedBox(
+                              height: 220,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: provider.ongoingAnime.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    width: 140,
+                                    margin: const EdgeInsets.only(right: 12),
+                                    child: AnimeCard(
+                                      anime: provider.ongoingAnime[index],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 32),
+                            _buildSectionHeader(
+                              context,
+                              'Recently Added',
+                              () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ListAllScreen(type: 'completed'),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    childAspectRatio: 0.65,
+                                    crossAxisSpacing: 12,
+                                    mainAxisSpacing: 20,
+                                  ),
+                              itemCount: provider.completedAnime.take(6).length,
+                              itemBuilder: (context, index) {
+                                return AnimeCard(
+                                  anime: provider.completedAnime[index],
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 100), // Spacing for dock
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+              // Custom Top Navigation Bar
+              Positioned(
+                top: 50,
+                left: 0,
+                right: 0,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Icon(
+                        Icons.menu_rounded,
+                        color: Color(0xFFF47521),
+                        size: 28,
+                      ),
+                      // Segmented Toggle
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1F1F1F).withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF47521),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Text(
+                                'New',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
+                              child: Text(
+                                'Nearby',
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.4),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Icon(
+                        Icons.chat_bubble_outline_rounded,
+                        color: Color(0xFFF47521),
+                        size: 26,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           );
         },
       ),
@@ -152,7 +211,11 @@ class _HomeScreenState extends State<HomeScreen> {
               stops: [0, 0.3, 0.7, 1],
             ),
           ),
-          child: Image.network(anime.poster, fit: BoxFit.cover),
+          child: Image.network(
+            anime.poster,
+            fit: BoxFit.cover,
+            errorBuilder: (c, e, s) => Container(color: Colors.grey[900]),
+          ),
         ),
         Positioned(
           bottom: 40,

@@ -24,54 +24,91 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex],
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFF1A1A2E),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.5),
-              blurRadius: 10,
-              offset: const Offset(0, -2),
-            ),
-          ],
-        ),
-        child: NavigationBar(
-          selectedIndex: _selectedIndex,
-          onDestinationSelected: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-          backgroundColor: Colors.transparent,
-          indicatorColor: const Color(0xFF6C63FF).withOpacity(0.2),
-          destinations: const [
-            NavigationDestination(
-              icon: Icon(Icons.home_outlined),
-              selectedIcon: Icon(Icons.home, color: Color(0xFF6C63FF)),
-              label: 'Home',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.calendar_month_outlined),
-              selectedIcon: Icon(
-                Icons.calendar_month,
-                color: Color(0xFF6C63FF),
+      extendBody: true,
+      body: Stack(
+        children: [
+          _screens[_selectedIndex < _screens.length ? _selectedIndex : 0],
+          Positioned(
+            bottom: 30,
+            left: 20,
+            right: 20,
+            child: Container(
+              height: 70,
+              decoration: BoxDecoration(
+                color: const Color(0xFF141414).withOpacity(0.9),
+                borderRadius: BorderRadius.circular(35),
+                border: Border.all(color: Colors.white10, width: 0.5),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.4),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
               ),
-              label: 'Schedule',
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildDockItem(0, Icons.home_rounded, 'Home'),
+                  _buildDockItem(1, Icons.calendar_month_rounded, 'Schedule'),
+                  _buildCenterButton(),
+                  _buildDockItem(2, Icons.category_rounded, 'Genre'),
+                  _buildDockItem(3, Icons.search_rounded, 'Search'),
+                ],
+              ),
             ),
-            NavigationDestination(
-              icon: Icon(Icons.category_outlined),
-              selectedIcon: Icon(Icons.category, color: Color(0xFF6C63FF)),
-              label: 'Genre',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.search),
-              selectedIcon: Icon(Icons.search, color: Color(0xFF6C63FF)),
-              label: 'Search',
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
+    );
+  }
+
+  Widget _buildDockItem(int index, IconData icon, String label) {
+    bool isSelected = _selectedIndex == index;
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedIndex = index;
+        });
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: isSelected ? const Color(0xFFF47521) : Colors.white60,
+            size: 26,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: isSelected ? const Color(0xFFF47521) : Colors.white60,
+              fontSize: 10,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCenterButton() {
+    return Container(
+      width: 50,
+      height: 50,
+      decoration: BoxDecoration(
+        color: const Color(0xFFF47521),
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFF47521).withOpacity(0.3),
+            blurRadius: 10,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      child: const Icon(Icons.add, color: Colors.white, size: 30),
     );
   }
 }

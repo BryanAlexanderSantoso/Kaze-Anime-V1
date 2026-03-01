@@ -53,7 +53,24 @@ class KazeAnimeApp extends StatelessWidget {
           ),
           unselectedLabelStyle: TextStyle(fontSize: 12),
         ),
-        textTheme: GoogleFonts.outfitTextTheme(ThemeData.dark().textTheme),
+        textTheme: GoogleFonts.poppinsTextTheme(ThemeData.dark().textTheme)
+            .copyWith(
+              displayLarge: GoogleFonts.poppins(
+                textStyle: ThemeData.dark().textTheme.displayLarge,
+              ),
+              displayMedium: GoogleFonts.poppins(
+                textStyle: ThemeData.dark().textTheme.displayMedium,
+              ),
+              bodyLarge: GoogleFonts.poppins(
+                textStyle: ThemeData.dark().textTheme.bodyLarge,
+              ),
+              bodyMedium: GoogleFonts.poppins(
+                textStyle: ThemeData.dark().textTheme.bodyMedium,
+              ),
+            )
+            .apply(
+              fontFamilyFallback: ['Helvetica', '.SF Pro Display', 'Arial'],
+            ),
         useMaterial3: true,
       ),
       initialRoute: '/',

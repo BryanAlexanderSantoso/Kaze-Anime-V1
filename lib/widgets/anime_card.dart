@@ -19,7 +19,7 @@ class AnimeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double radius = 4;
+    const double radius = 8;
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -46,8 +46,13 @@ class AnimeCard extends StatelessWidget {
                       highlightColor: Colors.grey[800]!,
                       child: Container(color: Colors.black),
                     ),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
+                    errorWidget: (context, url, error) => Container(
+                      color: Colors.grey[900],
+                      child: const Icon(
+                        Icons.movie_filter,
+                        color: Colors.white24,
+                      ),
+                    ),
                   ),
                   // Rating Badge
                   if (anime.score != null && anime.score!.isNotEmpty)
@@ -119,6 +124,7 @@ class AnimeCard extends StatelessWidget {
               fontSize: 13,
               fontWeight: FontWeight.w600,
               height: 1.2,
+              color: Colors.white,
             ),
           ),
           if (anime.releaseDay != null)

@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _navigateToHome() async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 4));
     if (mounted) {
       Navigator.pushReplacementNamed(context, '/home');
     }
@@ -24,57 +24,65 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    const String logoUrl =
+        'https://ik.imagekit.io/psdoxljjy/logo-removebg-preview.png?updatedAt=1748393788409';
+
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF0F0F1E), Color(0xFF1A1A2E)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+        decoration: BoxDecoration(
+          gradient: RadialGradient(
+            colors: [const Color(0xFFF47521).withOpacity(0.15), Colors.black],
+            center: Alignment.center,
+            radius: 1.2,
           ),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF6C63FF).withOpacity(0.3),
-                    spreadRadius: 10,
-                    blurRadius: 20,
-                  ),
-                ],
-              ),
-              child: const Icon(
-                Icons.play_circle_fill,
-                size: 100,
-                color: Color(0xFF6C63FF),
+            Hero(
+              tag: 'app_logo',
+              child: Image.network(
+                logoUrl,
+                height: 180,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) => const Icon(
+                  Icons.play_circle_fill,
+                  size: 100,
+                  color: Color(0xFFF47521),
+                ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 32),
             const Text(
               'KAZE V1',
               style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 4,
+                fontSize: 36,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 6,
                 color: Colors.white,
               ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              'Stream Your Favorite Anime',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.white.withOpacity(0.7),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              decoration: BoxDecoration(
+                border: Border.all(color: const Color(0xFFF47521), width: 1.5),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: const Text(
+                'PREMIUM ANIME STREAMING',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                  color: Color(0xFFF47521),
+                ),
               ),
             ),
-            const SizedBox(height: 48),
-            const SpinKitWave(color: Color(0xFF6C63FF), size: 30),
+            const SizedBox(height: 60),
+            const SpinKitThreeBounce(color: Color(0xFFF47521), size: 24),
           ],
         ),
       ),

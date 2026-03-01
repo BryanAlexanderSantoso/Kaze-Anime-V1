@@ -66,6 +66,8 @@ class _DetailScreenState extends State<DetailScreen> {
                   CachedNetworkImage(
                     imageUrl: ImageUtils.getSafeImageUrl(_detail!.poster),
                     fit: BoxFit.cover,
+                    errorWidget: (context, url, error) =>
+                        Container(color: Colors.grey[900]),
                   ),
                   DecoratedBox(
                     decoration: BoxDecoration(
@@ -161,50 +163,10 @@ class _DetailScreenState extends State<DetailScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(Icons.add, color: Colors.white),
-                          label: const Text(
-                            'WATCHLIST',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          style: OutlinedButton.styleFrom(
-                            side: const BorderSide(color: Colors.white24),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(Icons.download, color: Colors.white),
-                          label: const Text(
-                            'DOWNLOAD',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          style: OutlinedButton.styleFrom(
-                            side: const BorderSide(color: Colors.white24),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                   const SizedBox(height: 24),
                   Text(
                     _detail!.synopsis,
-                    maxLines: 4,
+                    maxLines: 6,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       color: Colors.white70,
